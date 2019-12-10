@@ -5,7 +5,6 @@ import { success, failure } from "./libs/response";
 
 export async function main(event, context) {
     const data = JSON.parse(event.body);
-
     const params = {
         TableName: process.env.tableName,
         Item: {
@@ -21,6 +20,7 @@ export async function main(event, context) {
         await dynamoDbLib.call("put", params);
         return success(params.Item);
     } catch (error) {
+        console.log(error);
         return failure({ status: false });
     }
 }

@@ -1,3 +1,5 @@
+org: dbilderback
+app: serverless-app
 # NOTE: update this with your service name
 service: resume
 
@@ -33,49 +35,50 @@ iamRoleStatements:
       - dynamodb:PutItem
       - dynamodb:UpdateItem
       - dynamodb:DeleteItem
-    Resource: 'arn:aws:dynamodb:us-east-2:*:*'
+    Resource:
+      - 'Fn::GetAtt': [ResumeTable, Arn]
 
 functions:
   create:
     handler: create.main
     events:
       - http:
-        path: resume
-        method: post
-        cors: true
-        authorizer: aws_iam
+          path: resume
+          method: post
+          cors: true
+          authorizer: aws_iam
   get:
     handler: get.main
     events:
       - http:
-        path: resume/{id}
-        method: get
-        cors: true
-        authorizer: aws_iam
+          path: resume/{id}
+          method: get
+          cors: true
+          authorizer: aws_iam
   list:
     handler: list.main
     events:
       - http:
-        path: resumes
-        method: get
-        cors: true
-        authorizer: aws_iam
+          path: resumes
+          method: get
+          cors: true
+          authorizer: aws_iam
   update:
     handler: update.main
     events:
       - http:
-        path: resume/{id}
-        method: put
-        cors: true
-        authorizer: aws_iam
+          path: resume/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
   delete:
     handler: delete.main
     events:
       - http:
-        path: resume/{id}
-        method: delete
-        cors: true
-        authorizer: aws_iam
+          path: resume/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
 
 resources:
   - ${file(resources/api-gateway-errors.yml)}
